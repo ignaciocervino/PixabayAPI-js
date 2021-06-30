@@ -45,19 +45,28 @@ function mostrarAlerta(mensaje){
     
 }
 
-function buscarImagenes(){
+async function buscarImagenes(){
     const termino = document.querySelector('#termino').value;
 
     const key = '22293970-b0a492fd0a5343042726a91d3';
     const url= `https://pixabay.com/api/?key=${key}&q=${termino}&per_page=${registrosPorPagina}&page=${paginaActual}`;
 
-    fetch(url)
+    /*fetch(url)
         .then(respuesta=>respuesta.json())
         .then(resultado=>{
             mostrarImagenes(resultado.hits);
             totalPaginas = calcularPaginas(resultado.totalHits);
             mostrarImagenes(resultado.hits);
-        })
+        });*/
+    //Async Await
+    try {
+        const respuesta = await fetch(url);
+        const resultado = await respuesta.json();
+        totalPaginas = calcularPaginas(resultado.totalHits);
+        mostrarImagenes(resultado.hits);
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 //Generador que va a registrar la cantidad de elementos de acuerdo a las paginas
