@@ -1,6 +1,9 @@
 const resultado = document.querySelector('#resultado');
 const formulario = document.querySelector('#formulario');
 
+const registrosPorPagina = 40;
+
+let totalPaginas;
 
 window.onload= ()=>{
     formulario.addEventListener('submit',validarFormulario);
@@ -47,18 +50,23 @@ function buscarImagenes(termino){
         .then(respuesta=>respuesta.json())
         .then(resultado=>{
             mostrarImagenes(resultado.hits);
+            totalPaginas = calcularPaginas(resultado.totalHists);
+            mostrarImagenes(resultado.hits);
         })
 }
 
+function calcularPaginas(total){
+    return parseInt(Math.ceil(total/registrosPorPagina));
+}
+
 function mostrarImagenes(imagenes){
-    console.log("hola");
     limpiarHTML();
     
     imagenes.forEach(img => {
         const {previewURL,likes,views,largeImageURL} =img;//Todo extraido desde la API
 
         resultado.innerHTML += `
-            <div class"w-1/2 md:w1/3 lg:w-1/4 p-3 mb-4">
+            <div class="w-1/2 md:w1/3 lg:w-1/4 p-3 mb-4">
                 <div class="bg-white">
                     <img class="w-full" src="${previewURL}">
 
